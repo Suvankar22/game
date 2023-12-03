@@ -1,0 +1,55 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set up the display
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Quiz Quest: Educational Expedition")
+
+# Define colors
+white = (255, 255, 255)
+black = (0, 0, 0)
+red = (255, 0, 0)
+
+# Define fonts
+font = pygame.font.SysFont(None, 40)
+
+# Define questions and answers (you can add more)
+questions = ["What is the capital of France?", "What is the largest planet in our solar system?"]
+answers = [["Paris", "London", "Berlin", "Rome"], ["Jupiter", "Saturn", "Mars", "Earth"]]
+correct_answers = [0, 0]  # Index of the correct answer for each question
+
+current_question = 0
+score = 0
+
+# Main game loop
+running = True
+while running:
+    screen.fill(white)
+
+    # Display question
+    text = font.render(questions[current_question], True, black)
+    screen.blit(text, (50, 50))
+
+    # Display answer options
+    for i in range(len(answers[current_question])):
+        answer_text = font.render(answers[current_question][i], True, black)
+        screen.blit(answer_text, (50, 100 + i * 50))
+
+    # Check for user input
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            for i in range(len(answers[current_question])):
+                if 50 <= mouse_pos[0] <= 350 and 100 + i * 50 <= mouse_pos[1] <= 150 + i * 50:
+                    if i == correct_answers[current_question]:
+                        score += 10  # Increase score for correct answer
+                    current_question += 1  # Move to the next question
+
+    pygame.display.update()
